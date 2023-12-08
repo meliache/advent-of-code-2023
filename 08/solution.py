@@ -24,7 +24,7 @@ def get_node_name_dict() -> dict[str, tuple[str, str]]:
     return node_name_dict
 
 
-def main():
+def part1():
     directions = get_directions()
     node_dict = get_node_name_dict()
 
@@ -45,13 +45,30 @@ def main():
     return n_steps
 
 
+def part2():
+    directions = get_directions()
+    node_dict = get_node_name_dict()
+
+    nodes: list[str] = [node for node in node_dict if node.endswith("A")]
+    n_steps: int = 0
+    for direction in directions:
+        print(f"{n_steps=}, {nodes=}, {direction=}")
+        if all(node.endswith("Z") for node in nodes):
+            return n_steps
+        match direction:
+            case "L":
+                nodes = [node_dict[node][0] for node in nodes]
+            case "R":
+                nodes = [node_dict[node][1] for node in nodes]
+            case _:
+                raise ValueError(f"Direction should be L or R but is {direction}")
+        n_steps += 1
+    return n_steps
+
+
 if __name__ == "__main__":
-    log_path = Path(__file__).parent / "log"
-    logging.basicConfig(
-        filename=log_path,
-        encoding="utf-8",
-        level=logging.INFO,
-        filemode="w",
-    )
-    n_steps = main()
-    print(f"Steps needed: {n_steps:d}")
+    # n_steps_p2 = part1()
+    # print(f"Part1: Steps needed: {n_steps_p2:d}")
+
+    n_steps_p2 = part2()
+    print(f"Part1: Steps needed: {n_steps_p2:d}")
